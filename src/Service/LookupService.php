@@ -88,7 +88,9 @@ class LookupService
             ? $entityStatusMap[(int)$data['entityStatusCode']] : null;
 
         $entityData['LegalName'] = !empty($data['entityName']) ? $data['entityName'] : null;
-        $entityData['GSTStatus'] = !empty($gstStatusMap[$data['gstStatus']]) ? $gstStatusMap[$data['gstStatus']] : null;
+        $entityData['GSTStatus'] = !empty($data['gstStatus']) ?
+            !empty($gstStatusMap[$data['gstStatus']]) ? $gstStatusMap[$data['gstStatus']] : null :
+            null;
         $entityData['GSTEffectiveDate'] = !empty($data['gstEffectiveDate'])
             ? date('d/m/Y', strtotime($data['gstEffectiveDate'])) : null;
 
@@ -98,7 +100,7 @@ class LookupService
         $entityData['AustralianCompanyNumber'] = !empty($data['australianCompanyNumber'])
             ? $data['australianCompanyNumber'] : null;
 
-        if (count($data['tradingNames']) > 1) {
+        if (!empty($data['tradingNames']) && count($data['tradingNames']) > 1) {
             foreach ($data['tradingNames'] as $tradeName) {
                 if (!empty($tradeName['name']) && empty($tradeName['endDate'])) {
                     $entityData['TradingName'] = $tradeName['name'];
