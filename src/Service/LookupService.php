@@ -12,13 +12,13 @@ class LookupService
      * @config
      * @var string
      */
-    private static $url = 'https://api.business.govt.nz/services/v3/nzbn';
+    private static $url = 'https://api.business.govt.nz/gateway/nzbn/v5';
 
     /**
      * @config
      * @var string
      */
-    private static $access_token;
+    private static $subscription_key;
 
     /**
      * @param string $nzbn
@@ -242,17 +242,17 @@ class LookupService
     private function api($url)
     {
         $apiUrl = self::config()->get('url');
-        $accessToken = self::config()->get('access_token');
+        $subscriptionKey = self::config()->get('subscription_key');
 
-        if (!$accessToken) {
-            throw new \RuntimeException('NZBN API access token is invalid: ' . $accessToken);
+        if (!$subscriptionKey) {
+            throw new \RuntimeException('NZBN API subscription key is invalid: ' . $subscriptionKey);
         }
 
         $curl = curl_init($apiUrl . $url);
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $accessToken,
+            'Ocp-Apim-Subscription-Key: ' . $subscriptionKey,
             'Accept: application/json',
         ]);
 
